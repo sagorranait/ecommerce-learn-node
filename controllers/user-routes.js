@@ -1,5 +1,8 @@
+const Product = require('../models/product');
+
 const shopRoutes = (req, res, next) => {
   res.render('./shop/index', {
+    products: Product.fetchAll(),
     pageTitle: 'Shop Page',
     path: '/'
   });
@@ -7,6 +10,7 @@ const shopRoutes = (req, res, next) => {
 
 const productsRoutes = (req, res, next) => {
   res.render('./shop/product-list', {
+    products: Product.fetchAll(),
     pageTitle: 'All Products',
     path: '/products'
   });
