@@ -8,11 +8,12 @@ const addProduct = (req, res, next) => {
 }
 
 const adminProduct = (req, res, next) => {
+  const id = Math.random();
   const title = req.body.title;
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  const product = new Products(title, imageUrl, description, price);
+  const product = new Products(id, title, imageUrl, description, price);
   product.save();
   res.redirect('/');
 }

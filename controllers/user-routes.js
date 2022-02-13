@@ -16,6 +16,13 @@ const productsRoutes = (req, res, next) => {
   });
 }
 
+const productsDetalis = (req, res, next) => {
+  const id = req.params.productId;
+  const product = Product.productDetalisById(id);
+  console.log(product);
+  res.redirect('/');
+}
+
 const ordersCart = (req, res, next) => {
   res.render('./shop/cart', {
     pageTitle: 'Our Cart',
@@ -40,6 +47,7 @@ const checkoutRoutes = (req, res, next) => {
 module.exports = {
   shopRoutes,
   productsRoutes,
+  productsDetalis,
   ordersRoutes,
   ordersCart,
   checkoutRoutes
