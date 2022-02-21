@@ -1,26 +1,45 @@
 const Product = require('../models/product');
 
 const shopRoutes = (req, res, next) => {
-  res.render('./shop/index', {
-    products: Product.fetchAll(),
-    pageTitle: 'Shop Page',
-    path: '/'
-  });
+  Product.findAll()
+  .then(products => {
+    res.render('./shop/index', {
+      products: products,
+      pageTitle: 'Shop Page',
+      path: '/'
+    });
+  })
+  .catch(err => console.log(err));
 }
 
 const productsRoutes = (req, res, next) => {
-  res.render('./shop/product-list', {
-    products: Product.fetchAll(),
-    pageTitle: 'All Products',
-    path: '/products'
-  });
+  Product.findAll()
+  .then(products => {
+    res.render('./shop/product-list', {
+      products: products,
+      pageTitle: 'All Products',
+      path: '/products'
+    })
+  })
+  .catch(err => console.log(err));
 }
 
 const productsDetalis = (req, res, next) => {
-  const id = req.params.productId;
-  const product = Product.productDetalisById(id);
-  console.log(product);
-  res.redirect('/');
+  const prodId = req.params.productId;
+  Product.findAll({
+    where: {
+      id: prodId
+    }
+  })
+  .then(([products]) => {
+    res.render('./shop/product-detail', {
+      products: products,
+      pageTitle: products.title,
+      path: '/products'
+    })
+    console.log(products)
+  })
+  .catch(err => console.error(err));
 }
 
 const ordersCart = (req, res, next) => {
