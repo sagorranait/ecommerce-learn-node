@@ -37,8 +37,67 @@ const adminProducts = (req, res, next) => {
   .catch(err => console.error(err));
 }
 
+const getEditProduct = (req, res, next) => {
+  const editMode = req.query.edit;
+  if(!editMode){
+    return res.redirect('/');
+  }
+
+  const prodId = req.params.productId;
+  Products.findAll({ where: { id: prodId }})
+  .then(([product])=>{
+    if (!product) {
+      return res.redirect('/');
+    }
+    res.render('admin/edit-product', {
+      pageTitle: 'Edit Product',
+      path: '/admin/edit-product',
+      editing: editMode,
+      product: product
+    })
+  })
+  .catch(err => console.error(err));
+}
+
+const editProduct = (req, res, next) => {
+  const prodId = req.body.productId;
+  const updatedTitle = req.body.title;
+  const updatedPrice = req.body.price;
+  const updatedImgUrl = req.body.imageUrl;
+  const updatedDesc = req.body.description;
+  Products.findAll({ where: { id: prodId }})
+  .then(([product]) => {
+    product.title = updatedTitle;
+    product.price = updatedPrice;
+    product.description = updatedDesc;
+    product.imgUrl = updatedImgUrl;
+    return product.save();
+  })
+  .then(result => {
+    console.info('Updated the Product!');
+    res.redirect('/admin/products');
+  })
+  .catch(err => console.error(err));
+}
+
+const deleteProduct = (req, res, next) => {
+  const prodId = req.body.productId;
+  Products.findAll({ where: { id: prodId }})
+  .then(([product])=>{
+    return product.destroy();
+  })
+  .then( result => {
+    console.log('Destroy Product !');
+    res.redirect('/admin/products');
+  })
+  .catch(err => console.error(err));
+}
+
 module.exports = {
   addProduct,
   adminProduct,
-  adminProducts
+  adminProducts,
+  getEditProduct,
+  editProduct,
+  deleteProduct
 }
