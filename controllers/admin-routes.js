@@ -13,11 +13,11 @@ const adminProduct = (req, res, next) => {
   const imageUrl = req.body.imageUrl;
   const price = req.body.price;
   const description = req.body.description;
-  Products.create({
+  req.user.createProduct({
     title: title,
     price: price,
     imgUrl: imageUrl,
-    description: description
+    description: description,
   })
   .then(response => {
     res.redirect('/');
@@ -26,7 +26,7 @@ const adminProduct = (req, res, next) => {
 }
 
 const adminProducts = (req, res, next) => {
-  Products.findAll()
+  req.user.getProducts()
   .then(product => {
     res.render('admin/products', {
       products: product,
