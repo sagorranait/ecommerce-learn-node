@@ -1,7 +1,7 @@
 const Product = require('../models/product');
 
 const shopRoutes = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
   .then(products => {
     res.render('./shop/index', {
       products: products,
@@ -13,7 +13,7 @@ const shopRoutes = (req, res, next) => {
 }
 
 const productsRoutes = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
   .then(products => {
     res.render('./shop/product-list', {
       products: products,
@@ -26,18 +26,13 @@ const productsRoutes = (req, res, next) => {
 
 const productsDetalis = (req, res, next) => {
   const prodId = req.params.productId;
-  Product.findAll({
-    where: {
-      id: prodId
-    }
-  })
-  .then(([products]) => {
+  Product.productDetalisById(prodId)
+  .then((products) => {
     res.render('./shop/product-detail', {
       products: products,
       pageTitle: products.title,
       path: '/products'
     })
-    console.log(products)
   })
   .catch(err => console.error(err));
 }

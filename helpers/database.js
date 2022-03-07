@@ -1,16 +1,27 @@
-// const mysql = require('mysql2');
+const { MongoClient, ServerApiVersion } = require('mongodb');
 
-// const pool = mysql.createPool({
-//   host: 'localhost',
-//   user: 'root',
-//   password: '',
-//   database: 'node-project'
-// });
+const uri = "mongodb+srv://sagorranait:sagorranait@cluster0.pfvpn.mongodb.net/node-project?retryWrites=true&w=majority";
 
-// module.exports = pool.promise();
+const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-const Sequelize = require('sequelize');
+let _db;
 
-const sequelize = new Sequelize('node-project', 'root', '', {dialect: 'mysql', host: 'localhost'});
+const mongoConnect = (callback) => {
+  client.connect(error => {
+    _db = client.db('node-project');
+    callback();
+    // 5console.error(error);
+    // client.close();
+  });
+}
 
-module.exports = sequelize;
+const getDb = () => {
+  if (_db) {
+    return _db;
+  }
+  throw 'No database found!';
+};
+
+
+exports.mongoConnect = mongoConnect;
+exports.getDb = getDb;
